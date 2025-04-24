@@ -15,9 +15,20 @@ sudo apt-get install -y \
     curl \
     wget \
     unzip \
-    htop \
     vim \
     software-properties-common
+
+# JDK 21 설치 (빌드에 필요)
+echo "JDK 21 설치 중..."
+sudo apt-get install -y openjdk-21-jdk
+echo "JAVA_HOME 환경 변수 설정 중..."
+echo 'export JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64' >> ~/.bashrc
+echo 'export PATH=$PATH:$JAVA_HOME/bin' >> ~/.bashrc
+source ~/.bashrc
+
+# Maven 설치
+echo "Maven 설치 중..."
+sudo apt-get install -y maven
 
 # Docker 설치
 echo "Docker 설치 중..."
@@ -49,14 +60,6 @@ sudo ufw --force enable
 # 타임존 설정
 echo "타임존 설정 중..."
 sudo timedatectl set-timezone Asia/Seoul
-
-# swap 파일 설정 (메모리가 적은 인스턴스용)
-echo "Swap 파일 설정 중..."
-sudo fallocate -l 2G /swapfile
-sudo chmod 600 /swapfile
-sudo mkswap /swapfile
-sudo swapon /swapfile
-echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
 
 # 프로젝트 디렉토리 생성
 echo "프로젝트 디렉토리 생성 중..."

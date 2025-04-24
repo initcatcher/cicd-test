@@ -19,7 +19,7 @@
 ## 파일 구조
 
 - `nginx/nginx.conf` - Nginx 설정 파일
-- `docker-compose-bluegreen.yml` - 블루/그린 배포를 위한 Docker Compose 설정
+- `docker-compose.yml` - Docker Compose 설정
 - `scripts/deploy.sh` - 무중단 배포 스크립트
 - `scripts/init-deploy.sh` - 초기 배포 환경 설정 스크립트
 - `.github/workflows/ci-cd.yml` - GitHub Actions 워크플로우 파일

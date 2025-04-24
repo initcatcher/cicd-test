@@ -5,9 +5,7 @@ test github action
 
 ## 기술 스택
 - **백엔드**: Spring Boot
-- **데이터베이스**: 
-  - 프로덕션: MySQL
-  - 테스트: H2
+- **데이터베이스**: MySQL
 - **ORM**: MyBatis
 - **View**: Jsp
 - **인프라**: 
@@ -123,8 +121,39 @@ bash scripts/init-deploy.sh YOUR_DOCKER_HUB_USERNAME
    - 현재 비활성 환경(블루 또는 그린)에 새 버전 배포
    - 헬스체크 후 성공 시 트래픽 전환
 
-#### 수동 배포
-필요한 경우 수동으로 배포할 수 있습니다:
+#### 수동 빌드 및 배포
+
+필요한 경우 수동으로 빌드 및 배포할 수 있습니다:
+
+#### 옵션 1: 통합 빌드 및 배포 스크립트 사용 (권장)
+
+```bash
+# 스크립트 실행 권한 부여
+bash scripts/make-executable.sh
+
+# 빌드와 배포를 한 번에 진행 (배포 환경 자동 선택)
+bash scripts/manual-deploy.sh YOUR_DOCKER_HUB_USERNAME
+
+# 또는 특정 환경에 배포
+bash scripts/manual-deploy.sh YOUR_DOCKER_HUB_USERNAME blue
+```
+
+이 스크립트는 다음 작업을 자동으로 수행합니다:
+- Maven으로 애플리케이션 빌드
+- Docker 이미지 빌드
+- Docker Hub에 로그인 및 이미지 푸시
+- 대상 환경에 배포 (현재 활성 환경 자동 감지 후 반대 환경으로 배포)
+
+#### 옵션 2: 개별 스크립트 사용
+
+##### 1. Docker 이미지 빌드 및 푸시
+
+```bash
+# Docker 이미지 빌드 및 푸시
+bash scripts/docker-push.sh YOUR_DOCKER_HUB_USERNAME
+```
+
+##### 2. 배포
 
 ```bash
 # 블루 환경에 배포
@@ -133,6 +162,19 @@ bash scripts/deploy.sh YOUR_DOCKER_HUB_USERNAME blue
 # 그린 환경에 배포
 bash scripts/deploy.sh YOUR_DOCKER_HUB_USERNAME green
 ```
+
+### 배포 스크립트 구조
+
+프로젝트의 배포 스크립트는 다음과 같이 구성되어 있습니다:
+
+- `scripts/common.sh`: 모든 스크립트에서 공통으로 사용하는 함수 모음
+- `scripts/manual-deploy.sh`: 빌드부터 배포까지 모든 과정을 자동화한 통합 스크립트
+- `scripts/docker-push.sh`: Docker 이미지 빌드 및 Docker Hub 푸시 전용 스크립트
+- `scripts/deploy.sh`: 배포 전용 스크립트 (특정 환경에 애플리케이션 배포)
+- `scripts/init-deploy.sh`: 초기 배포 환경 설정 스크립트
+- `scripts/make-executable.sh`: 모든 스크립트에 실행 권한 부여 스크립트
+
+각 스크립트는 서로 의존성이 있지만, 필요에 따라 개별적으로 실행할 수 있습니다.
 
 ### 배포 관련 확인 및 디버깅
 
