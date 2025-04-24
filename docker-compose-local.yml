@@ -1,0 +1,54 @@
+version: '3'
+
+services:
+  nginx:
+    image: nginx:latest
+    container_name: nginx-local
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - app
+    networks:
+      - spring-network-local
+    restart: always
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: app-local
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=local
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-local:3306/boardapp?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+      - SPRING_DATASOURCE_USERNAME=boarduser
+      - SPRING_DATASOURCE_PASSWORD=boardpass
+    networks:
+      - spring-network-local
+    restart: always
+
+  mysql-local:
+    image: mysql:8.0
+    container_name: mysql-local
+    environment:
+      MYSQL_DATABASE: boardapp
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: boarduser
+      MYSQL_PASSWORD: boardpass
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql-data-local:/var/lib/mysql
+    networks:
+      - spring-network-local
+    restart: always
+
+networks:
+  spring-network-local:
+    driver: bridge
+
+volumes:
+  mysql-data-local: 

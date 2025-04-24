@@ -246,6 +246,89 @@ git merge upstream/main
 git pull upstream main
 ```
 
+## 로컬 환경에서 Docker Compose로 직접 배포하기
+
+로컬 개발 환경에서 Docker Hub 없이 직접 Docker Compose를 사용하여 애플리케이션을 배포할 수 있습니다.
+이 방법은 Docker Hub를 거치지 않고 로컬에서 직접 이미지를 빌드하고 실행합니다.
+
+### 로컬 배포 설정
+
+프로젝트는 로컬 배포를 위한 별도의 Docker Compose 파일(`docker-compose-local.yml`)을 제공합니다.
+이 파일은 다음과 같은 특징이 있습니다:
+
+- 단일 애플리케이션 인스턴스 실행 (Blue/Green 배포 대신)
+- 로컬 MySQL 데이터베이스 사용
+- 포트 직접 노출 (8080)
+
+### 로컬 배포 실행 방법
+
+#### Windows 환경
+
+```bash
+# 배치 스크립트 실행
+deploy-local.bat
+```
+
+#### Linux/Mac 환경
+
+```bash
+# 스크립트 실행 권한 부여
+chmod +x deploy-local.sh
+
+# 배포 스크립트 실행
+./deploy-local.sh
+```
+
+### 수동으로 로컬 배포하기
+
+1. Maven으로 애플리케이션 빌드:
+```bash
+# Windows
+mvnw clean package -DskipTests
+
+# Linux/Mac
+./mvnw clean package -DskipTests
+```
+
+2. Docker Compose로 실행:
+```bash
+docker-compose -f docker-compose-local.yml down
+docker-compose -f docker-compose-local.yml up -d --build
+```
+
+3. 애플리케이션 접속:
+   - Nginx를 통한 접속: http://localhost
+   - 직접 접속: http://localhost:8080
+
+### 로컬 배포 관리
+
+- 컨테이너 상태 확인:
+```bash
+docker ps
+```
+
+- 로그 확인:
+```bash
+# Nginx 로그
+docker logs nginx-local
+
+# 애플리케이션 로그
+docker logs app-local
+
+# MySQL 로그
+docker logs mysql-local
+```
+
+- 컨테이너 중지:
+```bash
+docker-compose -f docker-compose-local.yml down
+```
+
+- 볼륨을 포함한 전체 환경 제거:
+```bash
+docker-compose -f docker-compose-local.yml down -v
+```
+
 ## GitHub Actions CI/CD 구성
 
 ### 필요한 GitHub Secrets 설정
