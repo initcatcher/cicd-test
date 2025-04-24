@@ -79,7 +79,6 @@ setup.sh 스크립트는 다음 작업을 자동으로 수행합니다:
 - Git, curl, wget 등 기본 도구 설치
 - Docker 및 Docker Compose 설치
 - Docker 권한 설정
-- Node.js 설치
 - 방화벽 설정 (SSH, HTTP, HTTPS 포트 오픈)
 - 타임존을 Asia/Seoul로 설정
 - Swap 파일 설정 (2GB)
