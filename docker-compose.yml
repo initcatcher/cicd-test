@@ -1,0 +1,36 @@
+version: '3'
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: mysql
+    environment:
+      MYSQL_DATABASE: boardapp
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: boarduser
+      MYSQL_PASSWORD: boardpass
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - spring-network
+      
+  h2:
+    image: 'oscarfonts/h2'
+    container_name: h2
+    ports:
+      - '1521:1521'  # H2 TCP 포트
+      - '8082:81'    # H2 웹 콘솔 포트
+    environment:
+      - 'H2_OPTIONS=-ifNotExists'
+    volumes:
+      - './h2-data:/opt/h2-data'
+    networks:
+      - spring-network
+
+networks:
+  spring-network:
+    driver: bridge
+
+volumes:
+  mysql-data: 
