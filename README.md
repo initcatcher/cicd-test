@@ -10,7 +10,7 @@
 - **인프라**: 
   - Docker & Docker Compose
   - Nginx (무중단 배포)
-- **배포 방식**: 블루/그린 무중단 배포
+- **배포 방식**: 블루/그린 무중단 배포!!
 - **CI/CD**: GitHub Actions
 
 ## 무중단 배포 구성
