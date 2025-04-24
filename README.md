@@ -259,6 +259,7 @@ git pull upstream main
 - 단일 애플리케이션 인스턴스 실행 (Blue/Green 배포 대신)
 - 로컬 MySQL 데이터베이스 사용
 - 포트 직접 노출 (8080)
+- 로컬용 Nginx 설정 사용 (`nginx-local.conf`)
 
 ### 로컬 배포 실행 방법
 
@@ -328,6 +329,12 @@ docker-compose -f docker-compose-local.yml down
 ```bash
 docker-compose -f docker-compose-local.yml down -v
 ```
+
+### 주의사항
+
+1. 로컬 배포는 `nginx-local.conf` 파일을 사용합니다. 이 파일은 단일 애플리케이션 인스턴스를 사용하도록 구성되어 있습니다.
+2. `nginx.conf` 파일은 블루/그린 배포를 위한 설정이므로 로컬 배포에는 사용하지 않습니다.
+3. 문제가 발생할 경우 로그를 확인하여 문제를 진단하세요.
 
 ## GitHub Actions CI/CD 구성
 
